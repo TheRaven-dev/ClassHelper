@@ -49,8 +49,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class Helpers\Hunter Food handler.cs" />
-    <Compile Include="Class Helpers\Mage Food Handler.cs" />
+    <Compile Include="Hunter Helper\Hunter Food handler.cs" />
+    <Compile Include="Mage Helper\Mage Food Handler.cs" />
+    <Compile Include="Mage Helper\Mage Gem Handler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
