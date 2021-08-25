@@ -26,8 +26,7 @@ namespace ClassHelper
 
                 if (MainHandEnchant.Any())
                 {
-                    var Enchant = MainHandEnchant.FirstOrDefault();
-                    ItemsManager.UseItem(Enchant);
+                    ItemsManager.UseItem(MainHandEnchant.FirstOrDefault());
                     Thread.Sleep(10);
                     Lua.LuaDoString("PickupInventoryItem(16)");
                     /*Offhand
