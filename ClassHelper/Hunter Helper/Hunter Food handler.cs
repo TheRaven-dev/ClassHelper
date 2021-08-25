@@ -1,6 +1,7 @@
 ﻿using robotManager.Helpful;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using wManager.Wow.Helpers;
 using wManager.Wow.ObjectManager;
@@ -13,56 +14,32 @@ namespace ClassHelper.ClassHelpers
         {
             try
             {
-                do
-                {
-                    if (PetHappiness > 2 || ObjectManager.Me.InCombat || ObjectManager.Pet.InCombat || ObjectManager.Pet.HaveBuff("Feed Pet Effect") || !ObjectManager.Pet.IsValid || ObjectManager.Pet.IsDead || !SpellManager.KnowSpell("Feed Pet"))
-                        return;
+                if (PetHappiness > 2 || ObjectManager.Me.InCombat || ObjectManager.Pet.InCombat || ObjectManager.Pet.HaveBuff("Feed Pet Effect") || !ObjectManager.Pet.IsValid || ObjectManager.Pet.IsDead || !SpellManager.KnowSpell("Feed Pet"))
+                    return;
 
-                    if (HasFood())
-                    {
-                        Lua.LuaDoString("ClearCursor();");
-                        SpellManager.CastSpellByNameLUA("Feed Pet");
-                        Lua.LuaDoString("UseItemByName('" + PetFoodName + "')");
-                    }
-                    else
-                    {
-                        Logging.Write("No food is in your bag, you Should go Buy Some.");
-                    }
-                    Thread.Sleep(4000);
+
+                IEnumerable<String> MainHandEnchant = PetFoodDictionary
+                .Where(i => i.Value.ToString() == FoodTypes && ItemsManager.GetItemCountByNameLUA(i.Key) >= 1)
+                .OrderByDescending(i => i.Key)
+                .Select(i => i.Key);
+
+                if (MainHandEnchant.Any())
+                {
+                    Lua.LuaDoString("ClearCursor();");
+                    SpellManager.CastSpellByNameLUA("Feed Pet");
+                    Lua.LuaDoString("UseItemByName('" + MainHandEnchant.FirstOrDefault() + "')");
+                    Thread.Sleep(100);
                 }
-                while (Conditions.InGameAndConnectedAndAliveAndProductStartedNotInPause);
+                else
+                {
+                    Logging.Write("No food is in your bag, you Should go Buy Some.");
+                }
             }
             catch (Exception ex)
             {
                 Logging.Write($"PetFoodHandler > Starter > bug > {ex}");
             }
         }
-
-        private static Boolean HasFood()
-        {
-            PetFoodName = String.Empty;
-            try
-            {
-                foreach (var Petfood in PetFoodDictionary)
-                {
-                    if (FoodTypes == Petfood.Value.ToString())
-                    {
-                        if (ItemsManager.GetItemCountByNameLUA(Petfood.Key) > 0)
-                        {
-                            PetFoodName = Petfood.Key;
-                            break;
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Logging.Write($"Has Food boolean> bug > {ex}");
-                PetFoodName = String.Empty;
-            }
-            return PetFoodName != String.Empty;
-        }
-
 
         private static readonly Dictionary<String, Foodtype> PetFoodDictionary = new Dictionary<String, Foodtype>
         {
@@ -121,9 +98,35 @@ namespace ClassHelper.ClassHelpers
             Bread,
             Fungus,
         }
-
-        private static String FoodTypes = Lua.LuaDoString<String>("return GetPetFoodTypes();");
-        private static Int32 PetHappiness = Lua.LuaDoString<Int32>("local Happiness = GetPetHappiness(); return Happiness;");
-        private static String PetFoodName { get; set; }
+        private static readonly String FoodTypes = Lua.LuaDoString<String>("return GetPetFoodTypes();");
+        private static readonly Int32 PetHappiness = Lua.LuaDoString<Int32>("local Happiness = GetPetHappiness(); return Happiness;");
     }
 }
+
+
+/* old code
+ *         private static String PetFoodName { get; set; }
+ *         private static Boolean HasFood()
+        {
+            PetFoodName = String.Empty;
+            try
+            {
+                foreach (var Petfood in PetFoodDictionary)
+                {
+                    if (FoodTypes == Petfood.Value.ToString())
+                    {
+                        if (ItemsManager.GetItemCountByNameLUA(Petfood.Key) > 0)
+                        {
+                            PetFoodName = Petfood.Key;
+                            break;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logging.Write($"Has Food boolean> bug > {ex}");
+                PetFoodName = String.Empty;
+            }
+            return PetFoodName != String.Empty;
+        }*/

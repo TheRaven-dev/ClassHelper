@@ -50,9 +50,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Hunter Helper\Hunter Food handler.cs" />
+    <Compile Include="Mage Helper\Mage Drink Handler.cs" />
     <Compile Include="Mage Helper\Mage Food Handler.cs" />
     <Compile Include="Mage Helper\Mage Gem Handler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Other Class Helpers\Weapon Enchants %28Rogue - Warlock%29.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

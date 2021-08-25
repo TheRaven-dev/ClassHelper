@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ClassHelper.Mage_Helper
+namespace ClassHelper.ClassHelpers
 {
-    class Mage_Gem_Handler
+    class GemHandler
     {
+        
     }
 }
