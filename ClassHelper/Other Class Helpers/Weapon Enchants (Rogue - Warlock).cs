@@ -31,7 +31,8 @@ namespace ClassHelper
                     Thread.Sleep(10);
                     Lua.LuaDoString("PickupInventoryItem(16)");
                     /*Offhand
-                    Lua.LuaDoString("PickupInventoryItem(16)");*/
+                    Lua.LuaDoString("PickupInventoryItem(16)");
+                    */
                     Thread.Sleep(5000);
                 }
             }
